@@ -33,7 +33,8 @@ Groq API (open-source `gpt-oss-20b`; OpenAI / Hugging Face supported as options)
 docker compose up --build
 ```
 
-- Chat UI: http://localhost:8501  |  API docs: http://localhost:8000/docs
+- Once the containers are running, open the chat UI at `http://localhost:8501` and the API docs at `http://localhost:8000/docs` in your browser
+  (these addresses only work on the computer that is running the project; there is no public demo link)
 - First build takes several minutes (torch CPU + the embedding model); later starts are fast
 - Your documents and the FAISS index live in `./data`; if the index is missing, the API container builds it on start
 - Stop with `Ctrl+C`, or `docker compose down`; `.env` is never copied into the images
@@ -177,7 +178,8 @@ python -m pytest -q
 - [x] Tests (pytest) for ingestion, retrieval, API, agent, upload (all passing on the user's PC)
 - [x] Retrieval evaluation: 12 sample questions, top-3 hit rate (inside the pytest suite)
 - [x] Contextual chunk headers (document name + type embedded with every chunk)
-- [ ] Screenshots in `docs/screenshots/` + upload to GitHub (+ optional GitHub Actions CI)
+- [x] Screenshots in `docs/screenshots/` + uploaded to GitHub
+- [ ] Optional: GitHub Actions CI
 - [ ] Delete-document endpoint
 - [ ] Migrate off `langchain-community` (harmless "being sunset" warning for now)
 
@@ -313,3 +315,7 @@ python -m pytest -q
 - **Next session:** add screenshots, create the GitHub repository and push (step by step), optional CI, resume bullets
 - User confirmed `python -m pytest -q` -> `44 passed`; screenshots `chat.png` and `upload.png` added to `docs/screenshots/`
 - GitHub push started (repository creation, `git init`, safety check that `.env` is not tracked)
+- Pushed to GitHub: https://github.com/priyansh212/procurement-ai-assistant (first push failed on a stale saved credential;
+  removing the `git:https://github.com` entry in Windows Credential Manager fixed it)
+- **Next session:** check the repo page, add About description + topics, resume bullets with the repo link; optional CI
+- README: `localhost` links are now plain text instead of clickable links (GitHub visitors cannot open them; they only work on the machine running Docker)
