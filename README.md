@@ -239,83 +239,36 @@ python -m pytest -q
 - **Next session:** Dockerfiles + docker-compose (API + UI), then pytest,
   `/upload` endpoint, more synthetic docs
 
-### Session 5 — Docker
-- Installed Docker Desktop on Windows (WSL 2); hit "This app can't run on your PC" (wrong installer) and a 500 error
-  from the engine (engine not started / WSL needed update); `docker run hello-world` works now
-- Added `docker/Dockerfile.api` (python:3.10-slim, torch CPU, embedding model baked in at build time,
-  builds the FAISS index on first start if missing), `docker/Dockerfile.ui` (Streamlit only, small image),
-  `docker-compose.yml` (api on 8000, ui on 8501, `./data` mounted, ui waits for the API health check),
-  `.dockerignore`, per-image requirements files, and refreshed `.env.example` (Groq defaults)
-- First build failed at the torch step: the old pip in `python:3.10-slim` could not read the PyTorch CPU index
-  (`inconsistent Name` + `flit_core` not found). Fix: `pip install --upgrade pip` before installing torch
-- Status: rebuild OK; UI opened at localhost:8501, backend status green, answers with citations work
-- **Next session:** confirm the Docker build, then pytest, `/upload` endpoint, more synthetic docs
+### Session 5 — Docker, tests, uploads, sample documents, GitHub
 
-### Session 5 (continued) — Docker verified, pytest suite
-- Docker rebuild succeeded; chat UI on http://localhost:8501 works, sidebar green, cited answers returned
-- Added `pytest.ini` and 5 test files in `tests/` (26 tests): loaders, chunking, RAG helpers + prompt,
-  API (health, query, validation, 503/500 paths), LangGraph memory/rewriting, retrieval hit rate
-- In my sandbox 25 passed and 1 (retrieval) was skipped because sentence-transformers was not installed;
-  the retrieval test runs on the user's machine
-- Note: `pytest` and `httpx` were not part of the staged local install, so run `pip install pytest httpx` first
-- **Next session:** run the tests, then `/upload` endpoint + Streamlit upload widget, more synthetic docs
+**Built**
+- **Docker:** `docker/Dockerfile.api` (python:3.10-slim, torch CPU, embedding model baked in at build time, builds the FAISS
+  index on first start if missing), `docker/Dockerfile.ui` (Streamlit only), `docker-compose.yml` (API on 8000, UI on 8501,
+  `./data` mounted, UI waits for the API health check), `.dockerignore`, per-image requirements, refreshed `.env.example` (Groq defaults)
+- **Tests:** `pytest.ini` + 6 test files in `tests/` (44 tests): loaders, chunking, RAG helpers and prompt, API, LangGraph
+  memory/rewriting, upload, and a 12-question retrieval evaluation (top-3 hit rate >= 80%)
+- **Upload:** `POST /upload` and `GET /documents`; new `src/vectorstore/indexer.py` (safe file names, pdf/docx/txt only,
+  10 MB limit, re-indexes the whole corpus and hot-swaps the new FAISS index into the running chain, lock against parallel uploads);
+  Streamlit sidebar with type picker, file uploader and list of indexed documents; new dependency `python-multipart`
+- **Sample documents** (all invented): `supplier_manual.txt`, `supplier_agreement_globex.docx`, `vendor_risk_policy.pdf`
+- **Contextual chunk headers:** every chunk starts with `[Document: <file> | Type: <doc_type>]` before embedding;
+  `strip_context_header()` hides it again in the LLM context and the UI snippets
+- **Config:** `src/config.py` defaults now match the real setup (`groq`, `openai/gpt-oss-20b`; `.env` still overrides them)
+- **README:** rewritten as a portfolio page (features, screenshots, Docker quick start, Mermaid architecture, example questions)
+- **GitHub:** pushed to https://github.com/priyansh212/procurement-ai-assistant
 
-### Session 5 (continued) — pytest passed, /upload endpoint
-- User ran the suite: `26 passed in 164s` (slow part = loading torch + the embedding model)
-- Added `POST /upload` (multipart file + `doc_type`: contracts | policies | supplier_manuals) and `GET /documents`
-- New `src/vectorstore/indexer.py`: safe file name (no path tricks), allowed types pdf/docx/txt, 10 MB limit,
-  saves to `data/raw/<doc_type>/`, re-indexes the whole corpus and hot-swaps the new FAISS index into the running
-  chain (no restart); a lock stops two uploads from rebuilding at the same time
-- Streamlit sidebar: document type picker, file uploader, "Upload & index" button, list of indexed documents
-- New dependency `python-multipart` (needed by FastAPI for file uploads) in `requirements.txt` and `docker/requirements-api.txt`
-- Added `tests/test_upload.py` (14 tests); in my sandbox 39 passed + 1 skipped (retrieval skipped, no sentence-transformers)
-- Status: NOT yet run by the user. Docker needs a rebuild (`docker compose up --build`) for the new package
-- **Next session:** verify upload in the UI, then more synthetic docs (supplier manual, a PDF, second contract) + extend the retrieval eval set
+**Problems hit and fixes**
+- Docker installer "This app can't run on your PC" -> wrong installer type; `500 Internal Server Error` from the engine -> engine not started / `wsl --update`
+- First image build failed at the torch step (old pip could not read the PyTorch CPU index) -> `pip install --upgrade pip` first
+- Streamlit showed only grey loading boxes after a UI update -> browser cache, fixed with `Ctrl + Shift + R`
+- `pytest` retrieval test failed with `The paging file is too small (os error 1455)` -> Windows out of memory while Docker Desktop was running; stop Docker (`docker compose down`, quit Docker Desktop, `wsl --shutdown`) before running the tests
+- The Globex question ("What on-time delivery does Globex guarantee?") said "not found" at top-k 4 but worked at top-k 8: the chunk with
+  the answer did not contain the word "Globex" -> fixed with the chunk headers (rebuild the index and the Docker image after such a change:
+  upload any file in the UI or delete `data/processed/faiss_index`, then `docker compose up --build`)
+- `git push` failed with "Password authentication is not supported" -> removed the stale `git:https://github.com` entry in Windows Credential Manager
+- README `localhost` links do not work for GitHub visitors (localhost is their own PC) -> shown as plain text with a note
 
-### Session 5 (continued) — upload verified, richer sample documents
-- User ran `python -m pytest -q`: `40 passed`; upload in the Streamlit sidebar worked and the new document was answered with a citation
-- Tip: after a UI update, if Streamlit only shows grey loading boxes, hard-refresh with `Ctrl + Shift + R` (browser cache)
-- Added 3 synthetic documents (all invented, nothing real): `data/raw/supplier_manuals/supplier_manual.txt`,
-  `data/raw/contracts/supplier_agreement_globex.docx` (tests the DOCX loader),
-  `data/raw/policies/vendor_risk_policy.pdf` (tests the PDF loader) -> corpus is now 5 documents / 12 chunks
-- Retrieval evaluation grown from 5 to 12 questions (top-3 hit rate >= 80%)
-- Re-index after adding files by hand: delete `data/processed/faiss_index`, then `docker compose restart api`
-  (or upload any file in the UI, which re-indexes everything)
-- **Next session:** confirm the new documents are answered correctly, then cleanup (langchain-community imports, config defaults), optional CI, README screenshots, resume bullets
-- Troubleshooting: if `pytest` fails with `The paging file is too small (os error 1455)`, Windows is out of memory
-  (usually Docker Desktop is running at the same time). Stop Docker (`docker compose down`, quit Docker Desktop,
-  `wsl --shutdown`) and run the tests again
+**Known limitation:** `langchain-community` prints a "being sunset" DeprecationWarning. It is harmless today (FAISS store and
+document loaders still work), so the migration to standalone packages is postponed; the warning is hidden in pytest through `pytest.ini`.
 
-### Session 5 (continued) — all 40 tests green, config cleanup
-- After stopping Docker (memory), `python -m pytest -q` -> `40 passed` including the 12-question retrieval evaluation on the 6 documents
-- `src/config.py` defaults now match the real setup (`LLM_PROVIDER=groq`, `GROQ_MODEL=openai/gpt-oss-20b`); `.env` still overrides them
-- Known limitation: `langchain-community` prints a "being sunset" DeprecationWarning. It is harmless today; the pipeline
-  (FAISS vector store + document loaders) still works, so the migration to standalone packages is postponed on purpose.
-  Hidden in pytest output through `pytest.ini`
-- **Next session:** README polish with screenshots, GitHub upload (+ optional GitHub Actions CI), resume bullets
-
-### Session 5 (continued) — contextual chunk headers (fix for a missed DOCX answer)
-- Bug seen in the UI: "What on-time delivery does Globex guarantee?" -> "I could not find this in the provided documents"
-  (TXT and PDF questions worked). With top-k = 8 the answer (98%) appeared, so the DOCX WAS indexed but ranked too low:
-  the chunk holding "98% on-time" does not contain the word "Globex" (only the first chunk of that contract does)
-- Fix: every chunk now starts with a header line `[Document: <file> | Type: <doc_type>]` before embedding
-  (`src/ingestion/chunking.py`); `strip_context_header()` hides it again in the LLM context and in the UI snippets (`src/rag/chain.py`)
-- Tests: 3 new chunking tests + 1 RAG-helper test (sandbox: 43 passed, 1 skipped)
-- The index MUST be rebuilt after this change (old index has no headers): upload any file in the UI, or delete
-  `data/processed/faiss_index`; Docker also needs `docker compose up --build` because the code is baked into the image
-- **Next session:** verify the Globex question at the default top-k = 4, then screenshots / GitHub upload / resume bullets
-
-### Session 5 (continued) — header fix verified, README rewritten for GitHub
-- The Globex question now answers (98%) at the default top-k = 4 after the contextual chunk-header fix
-- README top part rewritten as a portfolio page: features, screenshots table, Docker quick start, example questions,
-  Mermaid architecture diagram (renders on GitHub), accurate tech stack (Groq `gpt-oss-20b`, no longer "GPT-4 / Llama 3")
-- The old Docker section moved into "Quick start"; setup/pipeline sections renamed "Local setup" / "Run the pipeline step by step"
-- Screenshots are referenced as `docs/screenshots/chat.png` and `upload.png`; they must be added before pushing to GitHub
-- `.gitignore` already contains `.env` and `data/processed/faiss_index/` (checked), so the Groq key will not be uploaded
-- **Next session:** add screenshots, create the GitHub repository and push (step by step), optional CI, resume bullets
-- User confirmed `python -m pytest -q` -> `44 passed`; screenshots `chat.png` and `upload.png` added to `docs/screenshots/`
-- GitHub push started (repository creation, `git init`, safety check that `.env` is not tracked)
-- Pushed to GitHub: https://github.com/priyansh212/procurement-ai-assistant (first push failed on a stale saved credential;
-  removing the `git:https://github.com` entry in Windows Credential Manager fixed it)
-- **Next session:** check the repo page, add About description + topics, resume bullets with the repo link; optional CI
-- README: `localhost` links are now plain text instead of clickable links (GitHub visitors cannot open them; they only work on the machine running Docker)
+**Next:** GitHub About description + topics, resume bullets with the repo link, optional GitHub Actions CI, optional delete-document endpoint
