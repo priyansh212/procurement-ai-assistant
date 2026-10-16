@@ -1,0 +1,28 @@
+MASTER SUPPLY AGREEMENT (SAMPLE) - Acme Industrial Components Ltd.
+
+Article 1: Term
+This Agreement is effective as of January 1, 2025 and shall remain in
+effect for a period of twenty-four (24) months, automatically renewing
+for successive twelve (12) month periods unless either party provides
+written notice of termination at least 60 days before the renewal date.
+
+Article 2: Pricing and Payment
+Prices are fixed for the first twelve (12) months of the Agreement.
+Thereafter, prices may be adjusted annually by no more than 5%, subject
+to 30 days written notice. Payment terms are Net 45 from invoice receipt.
+
+Article 3: Delivery and Lead Times
+Standard lead time for components is 10 business days from purchase
+order confirmation. Acme guarantees on-time delivery of at least 95% of
+orders, measured quarterly. Late deliveries beyond 3 business days incur
+a penalty of 1% of the order value per day, capped at 10%.
+
+Article 4: Quality and Warranty
+All components are warranted against manufacturing defects for a period
+of 12 months from delivery. Defective units will be replaced at no cost
+within 15 business days of a valid claim.
+
+Article 5: Termination for Cause
+Either party may terminate this Agreement immediately upon material
+breach that remains uncured 30 days after written notice, or in the
+event of the other party's insolvency or bankruptcy filing.

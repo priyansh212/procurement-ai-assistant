@@ -1,0 +1,31 @@
+# Starts the whole project with one command:  docker compose up --build
+services:
+  api:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.api
+    env_file: .env              # GROQ_API_KEY etc. (the .env file is never baked into the image)
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./data:/app/data        # your documents + the FAISS index live on your PC
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/health')"]
+      interval: 15s
+      timeout: 5s
+      retries: 20
+      start_period: 30s
+    restart: unless-stopped
+
+  ui:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.ui
+    environment:
+      API_URL: http://api:8000  # containers talk to each other by service name
+    ports:
+      - "8501:8501"
+    depends_on:
+      api:
+        condition: service_healthy
+    restart: unless-stopped

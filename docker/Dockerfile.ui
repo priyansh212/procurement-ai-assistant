@@ -1,0 +1,16 @@
+# ---------- UI image: Streamlit chat app ----------
+FROM python:3.10-slim
+
+ENV PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1
+
+WORKDIR /app
+
+COPY docker/requirements-ui.txt .
+RUN pip install --no-cache-dir -r requirements-ui.txt
+
+COPY streamlit_app ./streamlit_app
+
+EXPOSE 8501
+
+CMD ["streamlit", "run", "streamlit_app/app.py", "--server.port=8501", "--server.address=0.0.0.0", "--server.headless=true"]

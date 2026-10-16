@@ -1,0 +1,30 @@
+PROCUREMENT POLICY MANUAL (SAMPLE)
+
+Section 1: Purchase Approval Thresholds
+All purchases below $5,000 may be approved by a Department Manager.
+Purchases between $5,000 and $50,000 require approval from the Director
+of Procurement. Purchases exceeding $50,000 require a formal competitive
+bidding process with a minimum of three vendor quotes and sign-off from
+the Chief Financial Officer.
+
+Section 2: Vendor Onboarding
+New vendors must complete a Vendor Registration Form and pass a
+compliance check, including a valid tax identification number, proof of
+insurance, and a signed Code of Conduct agreement. Onboarding typically
+takes 5-7 business days once all documents are submitted.
+
+Section 3: Payment Terms
+Standard payment terms are Net 30 from the invoice date unless otherwise
+negotiated in the master service agreement. Early payment discounts of
+2% Net 10 may be offered at the discretion of the Procurement team.
+
+Section 4: Contract Renewal
+Contracts are reviewed 90 days before expiration. Auto-renewal clauses
+require written notice of non-renewal at least 60 days prior to the
+contract end date, unless the contract states otherwise.
+
+Section 5: Emergency Procurement
+In cases of urgent operational need, an Emergency Purchase Order may be
+issued without the standard three-quote requirement, provided it is
+retroactively approved by the Director of Procurement within 5 business
+days and documented with a justification memo.

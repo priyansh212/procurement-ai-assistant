@@ -1,0 +1,3 @@
+# Dependencies for the Streamlit UI container (no AI libraries needed here).
+streamlit>=1.40
+requests>=2.31

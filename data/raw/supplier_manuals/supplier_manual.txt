@@ -1,0 +1,17 @@
+SUPPLIER ONBOARDING AND QUALITY MANUAL
+Version 2.1 - Global Procurement Office
+
+Section 1: Supplier Onboarding
+Every new supplier must submit the following documents before the first purchase order is issued: GST registration certificate, PAN card copy, cancelled cheque with bank details, and a signed Supplier Code of Conduct. Onboarding is completed within 10 business days after all documents are received. Suppliers are not allowed to ship goods until the onboarding status shows Approved.
+
+Section 2: Quality Requirements
+Suppliers of physical goods must hold a valid ISO 9001 certification and share the certificate every year. The maximum accepted defect rate is 2% per delivery lot. Rejected goods must be replaced within 7 days at the supplier's cost, including the return freight.
+
+Section 3: Delivery and Packaging
+The on-time delivery target for all suppliers is 95% measured monthly. A delivery is on time if it arrives within 2 days of the confirmed date. Every shipment must include a packing slip that shows the purchase order number, item codes and quantities. Shipments without a packing slip may be refused at the warehouse gate.
+
+Section 4: Invoicing
+Each invoice must quote the purchase order number and must be submitted within 30 days of delivery. Invoices without a PO number are returned unpaid and must be corrected and resubmitted. Duplicate invoices are rejected automatically by the accounts payable system.
+
+Section 5: Audits and Corrective Action
+The company may audit a supplier's facilities with 14 days' written notice. After an audit finding, the supplier must submit a corrective action plan within 10 business days. Repeated unresolved findings can lead to suspension from the approved supplier list.
