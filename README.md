@@ -23,6 +23,13 @@ Groq API (open-source `gpt-oss-20b`; OpenAI / Hugging Face supported as options)
 |---|---|
 | ![Chat](docs/screenshots/chat.png) | ![Upload](docs/screenshots/upload.png) |
 
+## Demo video
+
+[![Watch the 2-minute demo](docs/screenshots/chat.png)](docs/demo.mp4)
+
+Click the image to watch a 2-minute walkthrough: cited answers, follow-up questions with memory, a refusal for an
+out-of-scope question, and uploading a new PDF and asking about it.
+
 ## Quick start (Docker)
 
 1. Install Docker Desktop and get a free API key at [console.groq.com](https://console.groq.com)
@@ -254,6 +261,7 @@ python -m pytest -q
 - **Contextual chunk headers:** every chunk starts with `[Document: <file> | Type: <doc_type>]` before embedding;
   `strip_context_header()` hides it again in the LLM context and the UI snippets
 - **Config:** `src/config.py` defaults now match the real setup (`groq`, `openai/gpt-oss-20b`; `.env` still overrides them)
+- **Demo video:** `docs/demo.mp4` (2 minutes, 720p, about 3.5 MB), linked from the README
 - **README:** rewritten as a portfolio page (features, screenshots, Docker quick start, Mermaid architecture, example questions)
 - **GitHub:** pushed to https://github.com/priyansh212/procurement-ai-assistant
 
@@ -271,4 +279,4 @@ python -m pytest -q
 **Known limitation:** `langchain-community` prints a "being sunset" DeprecationWarning. It is harmless today (FAISS store and
 document loaders still work), so the migration to standalone packages is postponed; the warning is hidden in pytest through `pytest.ini`.
 
-**Next:** GitHub About description + topics, resume bullets with the repo link, optional GitHub Actions CI, optional delete-document endpoint
+**Next:** GitHub About description + topics, resume bullets with the repo link, optional GitHub Actions CI, optional delete-document endpoint, optional public hosted demo (needs per-session index + limits)
