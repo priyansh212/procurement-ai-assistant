@@ -25,10 +25,14 @@ Groq API (open-source `gpt-oss-20b`; OpenAI / Hugging Face supported as options)
 
 ## Demo video
 
-[![Watch the 2-minute demo](docs/screenshots/chat.png)](docs/demo.mp4)
+A 2-minute walkthrough: cited answers, follow-up questions with memory, a refusal for an out-of-scope question,
+and uploading a new PDF and asking about it.
 
-Click the image to watch a 2-minute walkthrough: cited answers, follow-up questions with memory, a refusal for an
-out-of-scope question, and uploading a new PDF and asking about it.
+<!-- Paste the GitHub video URL (https://github.com/user-attachments/assets/...) on its own line right below this comment -->
+
+https://github.com/user-attachments/assets/c738b7c2-aeb3-4aed-ba87-052ec657f960
+
+[Download the demo video (docs/demo.mp4)](docs/demo.mp4)
 
 ## Quick start (Docker)
 
@@ -261,7 +265,7 @@ python -m pytest -q
 - **Contextual chunk headers:** every chunk starts with `[Document: <file> | Type: <doc_type>]` before embedding;
   `strip_context_header()` hides it again in the LLM context and the UI snippets
 - **Config:** `src/config.py` defaults now match the real setup (`groq`, `openai/gpt-oss-20b`; `.env` still overrides them)
-- **Demo video:** `docs/demo.mp4` (2 minutes, 720p, about 3.5 MB), linked from the README
+- **Demo video:** `docs/demo.mp4` (2 minutes, 720p, about 3.5 MB); GitHub does not play .mp4 files from the repo browser (it shows "View raw"), so the README embeds a GitHub-hosted video URL (uploaded by dragging the file into an issue text box) and keeps a download link as a fallback
 - **README:** rewritten as a portfolio page (features, screenshots, Docker quick start, Mermaid architecture, example questions)
 - **GitHub:** pushed to https://github.com/priyansh212/procurement-ai-assistant
 
